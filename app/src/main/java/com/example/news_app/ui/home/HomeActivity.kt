@@ -76,7 +76,6 @@ class HomeActivity : AppCompatActivity() {
             .commit()
         val v = fragment as CategoriesFragment
         v.onClickedItem = CategoriesFragment.OnClickedItem {
-            viewBinding.toolbar.menu.findItem(R.id.search_bar).isVisible = true
             viewBinding.toolbar.title = it
         }
     }
