@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">اخبارك</string>
+    <string name="sports">الرياضيه</string>
+    <string name="politics">السياسيه</string>
+    <string name="health">الصحه</string>
+    <string name="enviroment">البيئة</string>
+    <string name="business">الاقتصاديه</string>
+    <string name="science">العلمميه</string>
+    <string name="pick_your_category_of_interest">اختر تشكيلة واسعه من الاخبار</string>
+    <string name="open">افتح</string>
+    <string name="close">اغلق</string>
+    <string name="news_app">اخبارك</string>
+    <string name="view_full_article">اقرا المزيد</string>
+    <string name="language">اللغة</string>
+    <array name="lang">
+        <item>اللغات</item>
+        <item>الانجليوزيه</item>
+        <item>العربيه</item>
+    </array>
+</resources>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:bottom="5dp"
+        android:end="10dp"
+        android:start="10dp"
+        android:top="5dp">
+        <selector>
+            <item
+                android:drawable="@drawable/tabb"
+                android:state_selected="true" />
+            <item
+                android:drawable="@drawable/tabb2"
+                android:state_selected="false" />
+        </selector>
+
+    </item>
+</layer-list>

@@ -1,0 +1,22 @@
+<resources>
+    <!-- Base application theme. -->
+    <style name="Base.Theme.News_App" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <item name="colorPrimary">@color/primaryColour</item>
+        <item name="colorPrimaryDark">@color/primaryColour</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorOnPrimaryContainer">@color/white</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <item name="android:buttonStyleToggle">@color/white</item>
+    </style>
+
+    <style name="Theme.News_App" parent="Base.Theme.News_App" />
+
+    <style name="menu" parent="Base.Theme.News_App">
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="ToolbarStyle.Base" parent="">
+        <item name="popupMenuBackground">@color/white</item>
+    </style>
+</resources>

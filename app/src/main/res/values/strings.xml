@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">NewsApp</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
+    <string name="sports">Sports</string>
+    <string name="politics">Politics</string>
+    <string name="health">Health</string>
+    <string name="enviroment">Enviroment</string>
+    <string name="business">Business</string>
+    <string name="science">Science</string>
+    <string name="pick_your_category_of_interest">Pick your category of interest</string>
+    <string name="open">open</string>
+    <string name="close">close</string>
+    <string name="news_app">News App</string>
+    <string name="view_full_article">View Full Article</string>
+    <string name="search" translatable="false">Search</string>
+    <string name="language">Language</string>
+    <array name="lang">
+        <item>Languages</item>
+        <item>English</item>
+        <item>Arabic</item>
+    </array>
+</resources>
