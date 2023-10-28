@@ -46,7 +46,7 @@ class CategoriesFragment : Fragment() {
     }
 
     fun startFragment(tag: String) {
-        val fr = NewsFragment()
+        val fr = NewsFragment(true)
         var b = Bundle()
         b.putString("cat", tag)
         fr.arguments = b

@@ -16,6 +16,7 @@
             android:layout_height="match_parent">
 
             <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/appbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#00000000">
@@ -23,22 +24,26 @@
                 <androidx.appcompat.widget.Toolbar
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/toolbar"
                     android:gravity="center"
                     app:navigationIcon="@drawable/menu"
                     app:title="@string/news_app"
+                    app:buttonGravity="center_vertical"
                     app:titleTextColor="@color/white">
-                    <!--            <TextView-->
-                    <!--                android:layout_width="wrap_content"-->
-                    <!--                android:layout_height="wrap_content"-->
-                    <!--                android:text="@string/news_app"-->
-                    <!--                android:layout_gravity="center"-->
-                    <!--                android:textColor="@color/white"-->
-                    <!--                android:textSize="30sp"-->
-                    <!--                android:textStyle="bold"-->
 
-                    <!--                />-->
+                    <androidx.appcompat.widget.SearchView
+                        android:id="@+id/search"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="end"
+                        android:layout_margin="12dp"
+                        android:animateLayoutChanges="true"
+                        android:backgroundTint="@color/white"
+                        android:elevation="0dp"
+                        android:padding="5dp"
+                        app:animateNavigationIcon="true"
+                        app:searchIcon="@drawable/iconsearch" />
                 </androidx.appcompat.widget.Toolbar>
             </com.google.android.material.appbar.AppBarLayout>
 

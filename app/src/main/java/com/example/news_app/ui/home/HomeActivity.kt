@@ -3,13 +3,17 @@ package com.example.news_app.ui.home
 
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.example.news_app.R
 import com.example.news_app.databinding.ActivityHomeBinding
 import com.example.news_app.ui.categoriesfragement.CategoriesFragment
 import com.example.news_app.ui.settings.SettingsFragment
+
 
 class HomeActivity : AppCompatActivity() {
     lateinit var viewBinding: ActivityHomeBinding
@@ -25,6 +29,26 @@ class HomeActivity : AppCompatActivity() {
     private fun initViews() {
         initDrawer()
         navigateDrawer()
+        viewBinding.search.visibility = View.INVISIBLE
+        viewBinding.search.setOnSearchClickListener {
+            viewBinding.search.background = ContextCompat.getDrawable(this, R.drawable.searchback)
+        }
+        viewBinding.search.setOnCloseListener {
+
+            viewBinding.search.background = null
+            viewBinding.search.onActionViewCollapsed()
+            return@setOnCloseListener true
+        }
+
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        supportFragmentManager.popBackStack()
+        viewBinding.search.visibility = View.INVISIBLE
+        viewBinding.toolbar.title = getString(R.string.news_app)
+
+
     }
 
     private fun initDrawer() {
@@ -76,8 +100,9 @@ class HomeActivity : AppCompatActivity() {
             .commit()
         val v = fragment as CategoriesFragment
         v.onClickedItem = CategoriesFragment.OnClickedItem {
-            viewBinding.toolbar.menu.findItem(R.id.search_bar).isVisible = true
             viewBinding.toolbar.title = it
+            viewBinding.search.isVisible = true
+
         }
     }
 }

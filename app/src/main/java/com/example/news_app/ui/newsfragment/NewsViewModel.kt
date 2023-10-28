@@ -1,4 +1,4 @@
-package com.example.news_app.ui.viewModel
+package com.example.news_app.ui.newsfragment
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -46,12 +46,12 @@ class NewsViewModel : ViewModel() {
     }
 
 
-    fun getNewsSources(id: String?) {
+    fun getNewsSources(id: String?, query: String?) {
 
         showLoading.postValue(true)
         viewModelScope.launch {
             try {
-                var response = ApiManager.getApi().getNewsResponses(sources = id ?: "")
+                var response = ApiManager.getApi().getNewsResponses(sources = id ?: "", q = query)
                 articlesData.postValue(response.articles)
 
             } catch (e: HttpException) {
@@ -60,11 +60,11 @@ class NewsViewModel : ViewModel() {
                 error.postValue(
                     ErrorContainer(
                         res.message ?: "Something went wrong"
-                    ) { getNewsSources(id) })
+                    ) { getNewsSources(id, query) })
 
             } catch (e: Exception) {
                 error.postValue(ErrorContainer(e.message ?: "Something went wrong") {
-                    getNewsSources(id)
+                    getNewsSources(id, query)
                 })
             } finally {
                 showLoading.postValue(false)

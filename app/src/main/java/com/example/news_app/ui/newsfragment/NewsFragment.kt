@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.news_app.api.model.newsresponse.ArticlesItem
@@ -13,16 +14,17 @@ import com.example.news_app.databinding.FragmentNewsBinding
 import com.example.news_app.dialogextension.showMessage
 import com.example.news_app.ui.bindingclasses.ErrorContainer
 import com.example.news_app.ui.detailsactivity.DetailsActivity
-import com.example.news_app.ui.viewModel.NewsViewModel
+import com.example.news_app.ui.home.HomeActivity
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import kotlin.system.exitProcess
 
-class NewsFragment : Fragment() {
+class NewsFragment(enabled: Boolean) : Fragment() {
     private lateinit var viewBinding: FragmentNewsBinding
     private val adapter = NewsAdapter(null)
     lateinit var vm: NewsViewModel
     lateinit var category: String
+    var query: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         vm = ViewModelProvider(this)[NewsViewModel::class.java]
@@ -36,15 +38,15 @@ class NewsFragment : Fragment() {
         return viewBinding.root
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         initViews()
         initObserves()
         receiveCat()
         vm.getSources(category)
-
     }
+
 
     private fun initViews() {
         viewBinding.vm = vm
@@ -53,6 +55,20 @@ class NewsFragment : Fragment() {
         adapter.onItemClickListener = NewsAdapter.OnItemClickListener { position, item ->
             startActivity(item)
         }
+        (activity as HomeActivity).viewBinding.search.setOnQueryTextListener(object :
+            SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                TODO("Not yet implemented")
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                query = newText
+                vm.getNewsSources(s?.id, query = query)
+                return true
+            }
+
+        })
+
 
     }
 
@@ -61,8 +77,8 @@ class NewsFragment : Fragment() {
         i.putExtra("item", item)
         startActivity(i)
 
-    }
 
+    }
 
     fun receiveCat() {
         val args = arguments
@@ -83,6 +99,7 @@ class NewsFragment : Fragment() {
     }
 
 
+    var s: SourcesItem? = null
     fun bindTab(sources: List<SourcesItem?>?) {
         if (sources == null)
             return
@@ -94,34 +111,33 @@ class NewsFragment : Fragment() {
         }
         viewBinding.tablayout.addOnTabSelectedListener(object : OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
-                val s = tab?.tag as SourcesItem
-                vm.getNewsSources(s.id)
+                s = tab?.tag as SourcesItem
+                vm.getNewsSources(s?.id, query = query)
+
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {
             }
 
             override fun onTabReselected(tab: TabLayout.Tab?) {
-                val s = tab?.tag as SourcesItem
-                vm.getNewsSources(s.id)
+                s = tab?.tag as SourcesItem
+                vm.getNewsSources(s?.id, query = query)
             }
         })
         viewBinding.tablayout.getTabAt(0)?.select()
+
     }
 
 
     fun handelError(errorContainer: ErrorContainer) {
-        showMessage(
-            errorContainer.message ?: "Something went wrong",
+        showMessage(errorContainer.message ?: "Something went wrong",
             posMessage = "Try again",
             posAction = { dialog, _ ->
-
                 errorContainer.onTryAgainClickListener?.onClick()
                 dialog.dismiss()
             },
             negMessage = "cancel",
             negAction = { dialog, _ ->
-
                 dialog.dismiss()
                 exitProcess(0)
             })

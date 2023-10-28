@@ -9,7 +9,7 @@ interface WebService {
     @GET("v2/top-headlines/sources")
     suspend fun getSourceResponse(
         @Query("apiKey")
-        apiKey: String = "91dd52cc84bb43d185b795af26e09007",
+        apiKey: String = "0fb12c84804e45338bfa0fa9e27ddf49",
         @Query("category")
         category: String
 
@@ -18,7 +18,9 @@ interface WebService {
     @GET("v2/everything")
     suspend fun getNewsResponses(
         @Query("apiKey")
-        apiKey: String = "91dd52cc84bb43d185b795af26e09007",
+        apiKey: String = "0fb12c84804e45338bfa0fa9e27ddf49",
+        @Query("q")
+        q: String?,
         @Query("sources")
         sources: String?,
     ): NewsResponse
