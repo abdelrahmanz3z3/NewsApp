@@ -3,11 +3,11 @@ package com.example.news_app.ui.newsfragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.news_app.api.manager.ApiManager
-import com.example.news_app.api.model.newsresponse.ArticlesItem
-import com.example.news_app.api.model.newsresponse.NewsResponse
-import com.example.news_app.api.model.sourcesresponse.SourceResponse
-import com.example.news_app.api.model.sourcesresponse.SourcesItem
+import com.example.data.api.manager.ApiManager
+import com.example.data.api.model.newsresponse.ArticlesItem
+import com.example.data.api.model.newsresponse.NewsResponse
+import com.example.data.api.model.sourcesresponse.SourceResponse
+import com.example.data.api.model.sourcesresponse.SourcesItem
 import com.example.news_app.ui.bindingclasses.ErrorContainer
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
@@ -21,6 +21,7 @@ class NewsViewModel : ViewModel() {
     var error = MutableLiveData<ErrorContainer>()
 
     fun getSources(cat: String) {
+
         showLoading.postValue(true)
         viewModelScope.launch {
             try {

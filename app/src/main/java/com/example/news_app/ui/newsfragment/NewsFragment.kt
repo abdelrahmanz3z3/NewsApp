@@ -8,8 +8,8 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.example.news_app.api.model.newsresponse.ArticlesItem
-import com.example.news_app.api.model.sourcesresponse.SourcesItem
+import com.example.data.api.model.newsresponse.ArticlesItem
+import com.example.data.api.model.sourcesresponse.SourcesItem
 import com.example.news_app.databinding.FragmentNewsBinding
 import com.example.news_app.dialogextension.showMessage
 import com.example.news_app.ui.bindingclasses.ErrorContainer
@@ -36,6 +36,7 @@ class NewsFragment(enabled: Boolean) : Fragment() {
     ): View {
         viewBinding = FragmentNewsBinding.inflate(inflater, container, false)
         return viewBinding.root
+
     }
 
 

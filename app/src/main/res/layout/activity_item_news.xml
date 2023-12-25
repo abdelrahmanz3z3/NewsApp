@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
         <variable
             name="item"
-            type="com.example.news_app.api.model.newsresponse.ArticlesItem" />
+            type="com.example.data.api.model.newsresponse.ArticlesItem" />
 
     </data>
 
@@ -24,25 +23,13 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <ProgressBar
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center" />
-
                 <com.makeramen.roundedimageview.RoundedImageView
                     android:id="@+id/image"
                     url="@{item.urlToImage}"
                     android:layout_width="match_parent"
                     android:layout_height="250dp"
                     android:scaleType="centerCrop"
-                    app:riv_corner_radius="20dp"
-                    tools:src="@tools:sample/avatars" />
-
-            </FrameLayout>
+                    app:riv_corner_radius="20dp" />
 
             <TextView
                 android:id="@+id/title"

@@ -7,7 +7,7 @@
 
         <variable
             name="item"
-            type="com.example.news_app.api.model.newsresponse.ArticlesItem" />
+            type="com.example.data.api.model.newsresponse.ArticlesItem" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
