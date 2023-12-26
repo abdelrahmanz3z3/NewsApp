@@ -1,4 +1,4 @@
-package com.example.news_app.dialogextension
+package com.example.news_app.common.dialogextension
 
 import android.app.Activity
 import android.app.AlertDialog

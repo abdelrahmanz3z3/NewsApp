@@ -1,4 +1,4 @@
-package com.example.news_app.ui.settings
+package com.example.news_app.ui.home.settingsfragment
 
 import android.os.Bundle
 import android.view.LayoutInflater

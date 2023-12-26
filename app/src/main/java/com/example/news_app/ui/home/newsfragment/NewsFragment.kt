@@ -1,4 +1,4 @@
-package com.example.news_app.ui.newsfragment
+package com.example.news_app.ui.home.newsfragment
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,17 +8,20 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.example.data.api.model.newsresponse.ArticlesItem
-import com.example.data.api.model.sourcesresponse.SourcesItem
+import com.example.domain.model.News
+import com.example.domain.model.Sources
+import com.example.news_app.common.bindingclasses.ErrorContainer
+import com.example.news_app.common.dialogextension.showMessage
 import com.example.news_app.databinding.FragmentNewsBinding
-import com.example.news_app.dialogextension.showMessage
-import com.example.news_app.ui.bindingclasses.ErrorContainer
-import com.example.news_app.ui.detailsactivity.DetailsActivity
+import com.example.news_app.ui.details.DetailsActivity
 import com.example.news_app.ui.home.HomeActivity
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
+import dagger.hilt.android.AndroidEntryPoint
 import kotlin.system.exitProcess
 
+
+@AndroidEntryPoint
 class NewsFragment(enabled: Boolean) : Fragment() {
     private lateinit var viewBinding: FragmentNewsBinding
     private val adapter = NewsAdapter(null)
@@ -73,7 +76,7 @@ class NewsFragment(enabled: Boolean) : Fragment() {
 
     }
 
-    private fun startActivity(item: ArticlesItem) {
+    private fun startActivity(item: News) {
         val i = Intent(requireContext(), DetailsActivity::class.java)
         i.putExtra("item", item)
         startActivity(i)
@@ -100,8 +103,8 @@ class NewsFragment(enabled: Boolean) : Fragment() {
     }
 
 
-    var s: SourcesItem? = null
-    fun bindTab(sources: List<SourcesItem?>?) {
+    var s: Sources? = null
+    fun bindTab(sources: List<Sources?>?) {
         if (sources == null)
             return
         sources.forEach {
@@ -112,7 +115,7 @@ class NewsFragment(enabled: Boolean) : Fragment() {
         }
         viewBinding.tablayout.addOnTabSelectedListener(object : OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
-                s = tab?.tag as SourcesItem
+                s = tab?.tag as Sources
                 vm.getNewsSources(s?.id, query = query)
 
             }
@@ -121,7 +124,7 @@ class NewsFragment(enabled: Boolean) : Fragment() {
             }
 
             override fun onTabReselected(tab: TabLayout.Tab?) {
-                s = tab?.tag as SourcesItem
+                s = tab?.tag as Sources
                 vm.getNewsSources(s?.id, query = query)
             }
         })

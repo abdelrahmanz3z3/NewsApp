@@ -11,10 +11,11 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.example.news_app.R
 import com.example.news_app.databinding.ActivityHomeBinding
-import com.example.news_app.ui.categoriesfragement.CategoriesFragment
-import com.example.news_app.ui.settings.SettingsFragment
+import com.example.news_app.ui.home.categoriesfragement.CategoriesFragment
+import com.example.news_app.ui.home.settingsfragment.SettingsFragment
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class HomeActivity : AppCompatActivity() {
     lateinit var viewBinding: ActivityHomeBinding
     lateinit var toggel: ActionBarDrawerToggle

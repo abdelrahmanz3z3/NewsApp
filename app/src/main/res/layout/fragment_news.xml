@@ -8,14 +8,14 @@
 
         <variable
             name="vm"
-            type="com.example.news_app.ui.newsfragment.NewsViewModel" />
+            type="com.example.news_app.ui.home.newsfragment.NewsViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/pattern"
-        tools:context="com.example.news_app.ui.newsfragment.NewsFragment">
+        tools:context="com.example.news_app.ui.home.newsfragment.NewsFragment">
 
 
         <com.google.android.material.tabs.TabLayout

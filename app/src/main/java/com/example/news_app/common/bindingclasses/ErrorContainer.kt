@@ -1,4 +1,4 @@
-package com.example.news_app.ui.bindingclasses
+package com.example.news_app.common.bindingclasses
 
 data class ErrorContainer(
     var message: String?,

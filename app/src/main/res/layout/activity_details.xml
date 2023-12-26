@@ -7,7 +7,7 @@
 
         <variable
             name="item"
-            type="com.example.data.api.model.newsresponse.ArticlesItem" />
+            type="com.example.domain.model.News" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -42,7 +42,7 @@
             android:layout_height="match_parent"
             android:background="@drawable/pattern"
             app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
-            tools:context=".ui.detailsactivity.DetailsFragment">
+            tools:context=".ui.details.DetailsFragment">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"

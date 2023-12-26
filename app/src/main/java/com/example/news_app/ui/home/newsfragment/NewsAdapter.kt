@@ -1,13 +1,13 @@
-package com.example.news_app.ui.newsfragment
+package com.example.news_app.ui.home.newsfragment
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
-import com.example.data.api.model.newsresponse.ArticlesItem
+import com.example.domain.model.News
 import com.example.news_app.databinding.ActivityItemNewsBinding
 
-class NewsAdapter(var list: List<ArticlesItem?>?) : Adapter<NewsAdapter.ViewHolder>() {
+class NewsAdapter(var list: List<News?>?) : Adapter<NewsAdapter.ViewHolder>() {
     class ViewHolder(val itemBinding: ActivityItemNewsBinding) :
         RecyclerView.ViewHolder(itemBinding.root)
 
@@ -18,7 +18,7 @@ class NewsAdapter(var list: List<ArticlesItem?>?) : Adapter<NewsAdapter.ViewHold
     }
 
     override fun getItemCount(): Int = list?.size ?: 0
-    fun bindNews(list: List<ArticlesItem?>?) {
+    fun bindNews(list: List<News?>?) {
         this.list = list
         notifyDataSetChanged()
     }
@@ -37,6 +37,6 @@ class NewsAdapter(var list: List<ArticlesItem?>?) : Adapter<NewsAdapter.ViewHold
     var onItemClickListener: OnItemClickListener? = null
 
     fun interface OnItemClickListener {
-        fun onClick(position: Int, item: ArticlesItem)
+        fun onClick(position: Int, item: News)
     }
 }

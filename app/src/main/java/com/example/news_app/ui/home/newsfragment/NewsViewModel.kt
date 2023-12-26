@@ -1,23 +1,30 @@
-package com.example.news_app.ui.newsfragment
+package com.example.news_app.ui.home.newsfragment
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.data.api.manager.ApiManager
-import com.example.data.api.model.newsresponse.ArticlesItem
-import com.example.data.api.model.newsresponse.NewsResponse
-import com.example.data.api.model.sourcesresponse.SourceResponse
-import com.example.data.api.model.sourcesresponse.SourcesItem
-import com.example.news_app.ui.bindingclasses.ErrorContainer
+import com.example.data.apimodule.model.news.NewsResponse
+import com.example.data.apimodule.model.newsources.SourcesResponse
+import com.example.domain.model.News
+import com.example.domain.model.Sources
+import com.example.domain.usecases.NewsUseCase
+import com.example.domain.usecases.SourcesUseCase
+import com.example.news_app.common.bindingclasses.ErrorContainer
 import com.google.gson.Gson
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
+import javax.inject.Inject
 
-class NewsViewModel : ViewModel() {
+@HiltViewModel
+class NewsViewModel @Inject constructor(
+    private val sources: SourcesUseCase,
+    private val news: NewsUseCase
+) : ViewModel() {
 
     var showLoading = MutableLiveData<Boolean>()
-    var sourcesData = MutableLiveData<List<SourcesItem?>?>()
-    var articlesData = MutableLiveData<List<ArticlesItem?>?>()
+    var sourcesData = MutableLiveData<List<Sources?>?>()
+    var articlesData = MutableLiveData<List<News?>?>()
     var error = MutableLiveData<ErrorContainer>()
 
     fun getSources(cat: String) {
@@ -25,11 +32,11 @@ class NewsViewModel : ViewModel() {
         showLoading.postValue(true)
         viewModelScope.launch {
             try {
-                var response = ApiManager.getApi().getSourceResponse(category = cat)
-                sourcesData.postValue(response.sources)
+                val response = sources.getSources(cat)
+                sourcesData.postValue(response)
             } catch (e: HttpException) {
                 val errorBody = e.response()?.errorBody()?.string()
-                val res = Gson().fromJson(errorBody, SourceResponse::class.java)
+                val res = Gson().fromJson(errorBody, SourcesResponse::class.java)
                 error.postValue(ErrorContainer(res.message ?: "Something went wrong") {
                     getSources(
                         cat
@@ -47,13 +54,13 @@ class NewsViewModel : ViewModel() {
     }
 
 
-    fun getNewsSources(id: String?, query: String?) {
+    fun getNewsSources(id: String?, query: String? = null) {
 
         showLoading.postValue(true)
         viewModelScope.launch {
             try {
-                var response = ApiManager.getApi().getNewsResponses(sources = id ?: "", q = query)
-                articlesData.postValue(response.articles)
+                val response = news.getNews(id ?: "", q = query)
+                articlesData.postValue(response)
 
             } catch (e: HttpException) {
                 val errorResponse = e.response()?.errorBody()?.string()

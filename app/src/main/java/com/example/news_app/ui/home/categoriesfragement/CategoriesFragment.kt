@@ -1,4 +1,4 @@
-package com.example.news_app.ui.categoriesfragement
+package com.example.news_app.ui.home.categoriesfragement
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.news_app.R
 import com.example.news_app.databinding.FragmentCategoriesBinding
-import com.example.news_app.ui.newsfragment.NewsFragment
+import com.example.news_app.ui.home.newsfragment.NewsFragment
 
 class CategoriesFragment : Fragment() {
     lateinit var viewBinding: FragmentCategoriesBinding
