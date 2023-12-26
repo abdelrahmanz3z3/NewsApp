@@ -9,6 +9,7 @@
     <color name="brown">#CF7E48</color>
     <color name="yellow">#F2D352</color>
     <color name="primaryColour">#39A552</color>
+    <color name="placeholder">#DCD1D1</color>
 
     <!--    <color name="md_theme_light_primary">#6750A4</color>-->
     <!--    <color name="md_theme_light_onPrimary">#FFFFFF</color>-->

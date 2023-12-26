@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.domain.model.News
@@ -15,6 +16,7 @@ import com.example.news_app.common.dialogextension.showMessage
 import com.example.news_app.databinding.FragmentNewsBinding
 import com.example.news_app.ui.details.DetailsActivity
 import com.example.news_app.ui.home.HomeActivity
+import com.facebook.shimmer.Shimmer
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import dagger.hilt.android.AndroidEntryPoint
@@ -48,7 +50,7 @@ class NewsFragment(enabled: Boolean) : Fragment() {
         initViews()
         initObserves()
         receiveCat()
-        vm.getSources(category)
+        vm.invokeAction(NewsContract.Action.LoadSources(category))
     }
 
 
@@ -67,7 +69,7 @@ class NewsFragment(enabled: Boolean) : Fragment() {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 query = newText
-                vm.getNewsSources(s?.id, query = query)
+                vm.invokeAction(NewsContract.Action.LoadNews(s?.id!!, query))
                 return true
             }
 
@@ -84,27 +86,56 @@ class NewsFragment(enabled: Boolean) : Fragment() {
 
     }
 
-    fun receiveCat() {
+    private fun receiveCat() {
         val args = arguments
         category = args?.getString("cat").toString()
     }
 
 
-    fun initObserves() {
-        vm.sourcesData.observe(viewLifecycleOwner) {
-            bindTab(it)
+    private fun initObserves() {
+        vm.state.observe(viewLifecycleOwner, ::handelStates)
+    }
+
+    private fun handelStates(state: NewsContract.State) {
+        when (state) {
+            is NewsContract.State.Error -> {
+                handelError(state.error)
+            }
+
+            is NewsContract.State.Loading -> {
+                showShimmer()
+            }
+
+            is NewsContract.State.NewsSuccess -> {
+                hideShimmer()
+                adapter.bindNews(state.sources)
+            }
+
+            is NewsContract.State.SourcesSuccess -> {
+                bindTab(state.sources)
+            }
         }
-        vm.error.observe(viewLifecycleOwner) {
-            handelError(it)
-        }
-        vm.articlesData.observe(viewLifecycleOwner) {
-            adapter.bindNews(it)
-        }
+    }
+
+    private fun showShimmer() {
+        val shimmer = Shimmer.AlphaHighlightBuilder().setAutoStart(true).setBaseAlpha(0.25f)
+            .setHighlightAlpha(0.75f).setDirection(Shimmer.Direction.LEFT_TO_RIGHT).build()
+        viewBinding.rec.isVisible = false
+        viewBinding.shimmer.isVisible = true
+        viewBinding.shimmer.setShimmer(shimmer)
+        viewBinding.shimmer.startShimmer()
+    }
+
+    private fun hideShimmer() {
+        viewBinding.rec.isVisible = true
+        viewBinding.shimmer.stopShimmer()
+        viewBinding.shimmer.isVisible = false
+
     }
 
 
     var s: Sources? = null
-    fun bindTab(sources: List<Sources?>?) {
+    private fun bindTab(sources: List<Sources?>?) {
         if (sources == null)
             return
         sources.forEach {
@@ -116,7 +147,7 @@ class NewsFragment(enabled: Boolean) : Fragment() {
         viewBinding.tablayout.addOnTabSelectedListener(object : OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 s = tab?.tag as Sources
-                vm.getNewsSources(s?.id, query = query)
+                vm.invokeAction(NewsContract.Action.LoadNews(s?.id!!, query))
 
             }
 
@@ -125,7 +156,7 @@ class NewsFragment(enabled: Boolean) : Fragment() {
 
             override fun onTabReselected(tab: TabLayout.Tab?) {
                 s = tab?.tag as Sources
-                vm.getNewsSources(s?.id, query = query)
+                vm.invokeAction(NewsContract.Action.LoadNews(s?.id!!, query))
             }
         })
         viewBinding.tablayout.getTabAt(0)?.select()
@@ -133,8 +164,9 @@ class NewsFragment(enabled: Boolean) : Fragment() {
     }
 
 
-    fun handelError(errorContainer: ErrorContainer) {
-        showMessage(errorContainer.message ?: "Something went wrong",
+    private fun handelError(errorContainer: ErrorContainer) {
+        showMessage(
+            errorContainer.message ?: "Something went wrong",
             posMessage = "Try again",
             posAction = { dialog, _ ->
                 errorContainer.onTryAgainClickListener?.onClick()

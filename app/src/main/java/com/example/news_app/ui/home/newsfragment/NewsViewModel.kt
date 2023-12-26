@@ -5,10 +5,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.data.apimodule.model.news.NewsResponse
 import com.example.data.apimodule.model.newsources.SourcesResponse
-import com.example.domain.model.News
-import com.example.domain.model.Sources
 import com.example.domain.usecases.NewsUseCase
 import com.example.domain.usecases.SourcesUseCase
+import com.example.news_app.common.SingleLiveEvent
 import com.example.news_app.common.bindingclasses.ErrorContainer
 import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,62 +19,83 @@ import javax.inject.Inject
 class NewsViewModel @Inject constructor(
     private val sources: SourcesUseCase,
     private val news: NewsUseCase
-) : ViewModel() {
+) : ViewModel(), NewsContract.ViewModel {
 
-    var showLoading = MutableLiveData<Boolean>()
-    var sourcesData = MutableLiveData<List<Sources?>?>()
-    var articlesData = MutableLiveData<List<News?>?>()
-    var error = MutableLiveData<ErrorContainer>()
+    private val _event = SingleLiveEvent<NewsContract.Event>()
+    private val _state = MutableLiveData<NewsContract.State>()
+    override val event: SingleLiveEvent<NewsContract.Event>
+        get() = _event
+    override val state: MutableLiveData<NewsContract.State>
+        get() = _state
 
-    fun getSources(cat: String) {
+    override fun invokeAction(action: NewsContract.Action) {
 
-        showLoading.postValue(true)
+        when (action) {
+            is NewsContract.Action.LoadNews -> {
+                getNewsSources(action.source, action.q)
+            }
+
+            is NewsContract.Action.LoadSources -> {
+                getSources(action.category)
+            }
+        }
+    }
+
+    private fun getSources(cat: String) {
+
+        _state.postValue(NewsContract.State.Loading("Loading..."))
         viewModelScope.launch {
             try {
                 val response = sources.getSources(cat)
-                sourcesData.postValue(response)
+                _state.postValue(NewsContract.State.SourcesSuccess(response))
             } catch (e: HttpException) {
                 val errorBody = e.response()?.errorBody()?.string()
                 val res = Gson().fromJson(errorBody, SourcesResponse::class.java)
-                error.postValue(ErrorContainer(res.message ?: "Something went wrong") {
-                    getSources(
-                        cat
-                    )
-                })
+                _state.postValue(
+                    NewsContract.State.Error(
+                        ErrorContainer(
+                            res.message ?: "Something went wrong"
+                        ) {
+                            getSources(cat)
+                        })
+                )
             } catch (e: Exception) {
-                error.postValue(
-                    ErrorContainer(
-                        e.message ?: "Something went wrong"
-                    ) { getSources(cat) })
-            } finally {
-                showLoading.postValue(false)
+                _state.postValue(NewsContract.State.Error(ErrorContainer(
+                    e.message ?: "Something went wrong"
+                )
+                { getSources(cat) }
+                ))
             }
         }
     }
 
 
-    fun getNewsSources(id: String?, query: String? = null) {
+    private fun getNewsSources(id: String?, query: String? = null) {
 
-        showLoading.postValue(true)
+        _state.postValue(NewsContract.State.Loading("Loading..."))
         viewModelScope.launch {
             try {
                 val response = news.getNews(id ?: "", q = query)
-                articlesData.postValue(response)
+                _state.postValue(NewsContract.State.NewsSuccess(response))
 
             } catch (e: HttpException) {
                 val errorResponse = e.response()?.errorBody()?.string()
                 val res = Gson().fromJson(errorResponse, NewsResponse::class.java)
-                error.postValue(
-                    ErrorContainer(
+                _state.postValue(
+                    NewsContract.State.Error(ErrorContainer(
                         res.message ?: "Something went wrong"
                     ) { getNewsSources(id, query) })
+                )
 
             } catch (e: Exception) {
-                error.postValue(ErrorContainer(e.message ?: "Something went wrong") {
-                    getNewsSources(id, query)
-                })
-            } finally {
-                showLoading.postValue(false)
+                _state.postValue(
+                    NewsContract.State.Error(
+                        ErrorContainer(
+                            e.message ?: "Something went wrong"
+                        ) {
+                            getNewsSources(id, query)
+                        })
+                )
             }
 
         }

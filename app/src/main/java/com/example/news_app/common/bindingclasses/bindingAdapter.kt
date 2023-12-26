@@ -11,23 +11,19 @@ import com.facebook.shimmer.ShimmerDrawable
 
 @BindingAdapter("url")
 fun bindUrl(imageView: ImageView, url: String?) {
-    if (url.isNullOrBlank()) return
-
-    val shimmer = Shimmer.AlphaHighlightBuilder()
-        .setDuration(1000) // time to do one full sweep
-        .setBaseAlpha(0.9f) // the alpha of the underlying children
-        .setHighlightAlpha(0.6f) // the shimmer alpha amount
-        .setDirection(Shimmer.Direction.LEFT_TO_RIGHT)
-        .setAutoStart(true)
-        .build()
+    if (url.isNullOrBlank()) {
+        return
+    }
+    val shimmer = Shimmer.AlphaHighlightBuilder().setAutoStart(true).setBaseAlpha(0.7f)
+        .setHighlightAlpha(0.6f).setDirection(Shimmer.Direction.LEFT_TO_RIGHT).build()
     val shimmerDrawable = ShimmerDrawable()
     shimmerDrawable.setShimmer(shimmer)
     shimmerDrawable.startShimmer()
-
     Glide.with(imageView)
         .load(url)
         .placeholder(shimmerDrawable)
         .into(imageView)
+
 }
 
 @BindingAdapter("linkUrl")
