@@ -1,16 +1,15 @@
 package com.example.news_app.ui.home.newsfragment
 
-import androidx.lifecycle.MutableLiveData
 import com.example.domain.model.News
 import com.example.domain.model.Sources
 import com.example.news_app.common.SingleLiveEvent
 import com.example.news_app.common.bindingclasses.ErrorContainer
+import kotlinx.coroutines.flow.StateFlow
 
 class NewsContract {
-
     interface ViewModel {
         fun invokeAction(action: Action)
-        val state: MutableLiveData<State>
+        val state: StateFlow<State>
         val event: SingleLiveEvent<Event>
     }
 

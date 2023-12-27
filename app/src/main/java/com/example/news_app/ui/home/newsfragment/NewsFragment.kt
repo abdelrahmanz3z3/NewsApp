@@ -8,7 +8,10 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.example.domain.model.News
 import com.example.domain.model.Sources
 import com.example.news_app.common.bindingclasses.ErrorContainer
@@ -20,6 +23,7 @@ import com.facebook.shimmer.Shimmer
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import kotlin.system.exitProcess
 
 
@@ -93,26 +97,29 @@ class NewsFragment(enabled: Boolean) : Fragment() {
 
 
     private fun initObserves() {
-        vm.state.observe(viewLifecycleOwner, ::handelStates)
-    }
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                vm.state.collect { state ->
+                    when (state) {
+                        is NewsContract.State.Error -> {
+                            handelError(state.error)
+                        }
 
-    private fun handelStates(state: NewsContract.State) {
-        when (state) {
-            is NewsContract.State.Error -> {
-                handelError(state.error)
-            }
+                        is NewsContract.State.Loading -> {
+                            showShimmer()
+                        }
 
-            is NewsContract.State.Loading -> {
-                showShimmer()
-            }
+                        is NewsContract.State.NewsSuccess -> {
+                            hideShimmer()
+                            adapter.bindNews(state.sources)
+                        }
 
-            is NewsContract.State.NewsSuccess -> {
-                hideShimmer()
-                adapter.bindNews(state.sources)
-            }
+                        is NewsContract.State.SourcesSuccess -> {
+                            bindTab(state.sources)
+                        }
+                    }
 
-            is NewsContract.State.SourcesSuccess -> {
-                bindTab(state.sources)
+                }
             }
         }
     }
