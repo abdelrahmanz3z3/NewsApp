@@ -4,13 +4,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import com.example.news_app.R
 import com.example.news_app.databinding.FragmentCategoriesBinding
+import com.example.news_app.ui.home.HomeActivity
+import com.example.news_app.ui.home.SharedViewModel
 import com.example.news_app.ui.home.newsfragment.NewsFragment
 
 class CategoriesFragment : Fragment() {
     lateinit var viewBinding: FragmentCategoriesBinding
+    val sharedViewModel: SharedViewModel by activityViewModels()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -21,48 +27,45 @@ class CategoriesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        (activity as HomeActivity).viewBinding.search.isVisible = false
         startNews()
     }
 
     private fun startNews() {
         viewBinding.sports.setOnClickListener {
-            startFragment(it.tag.toString())
+            startFragment()
+            sharedViewModel.setterCategory(it.tag.toString())
         }
         viewBinding.politics.setOnClickListener {
-            startFragment(it.tag.toString())
+            startFragment()
+            sharedViewModel.setterCategory(it.tag.toString())
         }
         viewBinding.health.setOnClickListener {
-            startFragment(it.tag.toString())
+            startFragment()
+            sharedViewModel.setterCategory(it.tag.toString())
         }
         viewBinding.bussiness.setOnClickListener {
-            startFragment(it.tag.toString())
+            startFragment()
+            sharedViewModel.setterCategory(it.tag.toString())
         }
         viewBinding.enviroment.setOnClickListener {
-            startFragment(it.tag.toString())
+            startFragment()
+            sharedViewModel.setterCategory(it.tag.toString())
         }
         viewBinding.science.setOnClickListener {
-            startFragment(it.tag.toString())
+            startFragment()
+            sharedViewModel.setterCategory(it.tag.toString())
         }
     }
 
-    fun startFragment(tag: String) {
-        val fr = NewsFragment(true)
-        var b = Bundle()
-        b.putString("cat", tag)
-        fr.arguments = b
+    private fun startFragment() {
         parentFragmentManager
             .beginTransaction()
             .addToBackStack("")
-            .replace(R.id.container, fr)
+            .replace(R.id.container, NewsFragment())
             .commit()
-        onClickedItem?.onClick(tag)
     }
 
-    var onClickedItem: OnClickedItem? = null
-
-    fun interface OnClickedItem {
-        fun onClick(s: String)
-    }
 
 
 }

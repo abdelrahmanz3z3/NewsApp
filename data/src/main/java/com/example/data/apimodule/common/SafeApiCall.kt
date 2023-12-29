@@ -16,5 +16,6 @@ suspend fun <T> safeApiCall(apiCall: suspend () -> T): Flow<ResultWrapper<T>> = 
     when (it) {
         is HttpException -> emit(ResultWrapper.ServerException(ServerError(it.localizedMessage!!)))
         is TimeoutException -> emit(ResultWrapper.Error(it))
+        is Exception -> emit(ResultWrapper.Error(it))
     }
 }

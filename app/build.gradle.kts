@@ -55,9 +55,12 @@ dependencies {
     implementation("androidx.core:core-ktx:1.10.1")
     implementation(project(mapOf("path" to ":data")))
     implementation(project(mapOf("path" to ":domain")))
+
     val lifecycle_version = "2.6.2"
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version")
+    implementation("com.dolatkia:animated-theme-manager:1.1.4")
+    implementation("androidx.fragment:fragment-ktx:1.6.2")
     implementation("com.google.dagger:hilt-android:2.50")
     kapt("com.google.dagger:hilt-android-compiler:2.50")
     implementation("androidx.appcompat:appcompat:1.6.1")

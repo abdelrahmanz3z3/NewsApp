@@ -1,13 +1,15 @@
 package com.example.news_app.ui.home
 
 
+import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
+import android.window.OnBackInvokedDispatcher
+import androidx.activity.addCallback
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.example.news_app.R
 import com.example.news_app.databinding.ActivityHomeBinding
@@ -19,13 +21,35 @@ import dagger.hilt.android.AndroidEntryPoint
 class HomeActivity : AppCompatActivity() {
     lateinit var viewBinding: ActivityHomeBinding
     lateinit var toggel: ActionBarDrawerToggle
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(R.style.Darktheme)
         super.onCreate(savedInstanceState)
         viewBinding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
+        viewBinding.lifecycleOwner = this
         initViews()
         addFragment(CategoriesFragment())
+        executeOnBackPressed()
+
+
     }
+
+    private fun executeOnBackPressed() {
+        if (Build.VERSION.SDK_INT >= 33) {
+            onBackInvokedDispatcher.registerOnBackInvokedCallback(OnBackInvokedDispatcher.PRIORITY_DEFAULT)
+            {
+                supportFragmentManager.popBackStack()
+                viewBinding.toolbar.title = getString(R.string.app_name)
+            }
+        } else {
+            onBackPressedDispatcher.addCallback(this) {
+                supportFragmentManager.popBackStack()
+                viewBinding.toolbar.title = getString(R.string.app_name)
+            }
+        }
+    }
+
 
     private fun initViews() {
         initDrawer()
@@ -35,7 +59,6 @@ class HomeActivity : AppCompatActivity() {
             viewBinding.search.background = ContextCompat.getDrawable(this, R.drawable.searchback)
         }
         viewBinding.search.setOnCloseListener {
-
             viewBinding.search.background = null
             viewBinding.search.onActionViewCollapsed()
             return@setOnCloseListener true
@@ -43,14 +66,6 @@ class HomeActivity : AppCompatActivity() {
 
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-        supportFragmentManager.popBackStack()
-        viewBinding.search.visibility = View.INVISIBLE
-        viewBinding.toolbar.title = getString(R.string.news_app)
-
-
-    }
 
     private fun initDrawer() {
         toggel = ActionBarDrawerToggle(
@@ -78,7 +93,7 @@ class HomeActivity : AppCompatActivity() {
                 R.id.settings -> {
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.container, SettingsFragment()).addToBackStack("").commit()
-                    viewBinding.toolbar.title = "Settings"
+                    viewBinding.toolbar.title = getString(R.string.settings)
                     viewBinding.drawer.close()
                 }
             }
@@ -99,11 +114,5 @@ class HomeActivity : AppCompatActivity() {
             .beginTransaction()
             .replace(R.id.container, fragment)
             .commit()
-        val v = fragment as CategoriesFragment
-        v.onClickedItem = CategoriesFragment.OnClickedItem {
-            viewBinding.toolbar.title = it
-            viewBinding.search.isVisible = true
-
-        }
     }
 }

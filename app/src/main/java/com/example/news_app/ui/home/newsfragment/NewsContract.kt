@@ -16,16 +16,19 @@ class NewsContract {
     sealed class Action {
         class LoadSources(val category: String) : Action()
         class LoadNews(val source: String, val q: String?) : Action()
+
+        class GoToDetailsActivity(val item: News) : Action()
     }
 
     sealed class State {
         class SourcesSuccess(val sources: List<Sources?>?) : State()
         class NewsSuccess(val sources: List<News?>?) : State()
         class Error(val error: ErrorContainer) : State()
-        class Loading(val message: String) : State()
+        data object LoadingSources : State()
+        data object LoadingNews : State()
     }
 
     sealed class Event {
-        class NavigateBetweenSources(val source: String) : Event()
+        class NavigateToDetails(val item: News) : Event()
     }
 }

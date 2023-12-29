@@ -20,12 +20,13 @@ class NewsViewModel @Inject constructor(
 ) : ViewModel(), NewsContract.ViewModel {
 
     private val _event = SingleLiveEvent<NewsContract.Event>()
-    private val _state =
-        MutableStateFlow<NewsContract.State>(NewsContract.State.Loading("Loading..."))
-    override val event: SingleLiveEvent<NewsContract.Event>
-        get() = _event
+    private val _state = MutableStateFlow<NewsContract.State>(NewsContract.State.LoadingSources)
     override val state: StateFlow<NewsContract.State>
         get() = _state
+
+    override val event: SingleLiveEvent<NewsContract.Event>
+        get() = _event
+
 
     override fun invokeAction(action: NewsContract.Action) {
 
@@ -36,6 +37,10 @@ class NewsViewModel @Inject constructor(
 
             is NewsContract.Action.LoadSources -> {
                 getSources(action.category)
+            }
+
+            is NewsContract.Action.GoToDetailsActivity -> {
+                _event.postValue(NewsContract.Event.NavigateToDetails(action.item))
             }
         }
     }
@@ -57,7 +62,7 @@ class NewsViewModel @Inject constructor(
                     }
 
                     ResultWrapper.Loading -> {
-                        _state.emit(NewsContract.State.Loading("Loading..."))
+                        _state.emit(NewsContract.State.LoadingSources)
                     }
 
                     is ResultWrapper.ServerException -> {
@@ -94,7 +99,7 @@ class NewsViewModel @Inject constructor(
                     }
 
                     ResultWrapper.Loading -> {
-                        _state.emit(NewsContract.State.Loading("Loading..."))
+                        _state.emit(NewsContract.State.LoadingNews)
                     }
 
                     is ResultWrapper.ServerException -> {

@@ -13,9 +13,17 @@
     <string name="news_app">اخبارك</string>
     <string name="view_full_article">اقرا المزيد</string>
     <string name="language">اللغة</string>
+    <string name="categories">الاقسام</string>
+    <string name="settings">الاعدادات</string>
+    <string name="mode">الوضع</string>
     <array name="lang">
         <item>اللغات</item>
-        <item>الانجليوزيه</item>
+        <item>الانجليزيه</item>
         <item>العربيه</item>
+    </array>
+    <array name="mode">
+        <item>الوضع</item>
+        <item>نهاري</item>
+        <item>ليلي</item>
     </array>
 </resources>

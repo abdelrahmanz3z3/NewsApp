@@ -11,6 +11,9 @@
     <color name="primaryColour">#39A552</color>
     <color name="placeholder">#DCD1D1</color>
 
+    <color name="colorPrimary">#0B4418</color>
+    <color name="colorPrimaryDark">#031C09</color>
+
     <!--    <color name="md_theme_light_primary">#6750A4</color>-->
     <!--    <color name="md_theme_light_onPrimary">#FFFFFF</color>-->
     <!--    <color name="md_theme_light_primaryContainer">#EADDFF</color>-->

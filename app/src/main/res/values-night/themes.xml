@@ -1,7 +1,22 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="Base.Theme.News_App" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+    <style name="Darktheme" parent="Theme.Material3.Dark.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <item name="colorPrimary">#0B4418</item>
+        <item name="colorPrimaryDark">#031C09</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorOnPrimaryContainer">@color/white</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <item name="android:buttonStyleToggle">@color/white</item>
+    </style>
+
+    <style name="Theme.News_App" parent="Darktheme" />
+
+    <style name="menu" parent="Darktheme">
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="ToolbarStyle.Base" parent="Darktheme">
+        <item name="popupMenuBackground">@color/white</item>
     </style>
 </resources>
